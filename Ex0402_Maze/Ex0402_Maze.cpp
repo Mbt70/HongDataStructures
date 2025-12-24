@@ -44,7 +44,7 @@ struct Pos
 	}
 };
 
-void RecurMaze(Pos p)
+/*void RecurMaze(Pos p)
 {
 	const char mark = maze[p.row][p.col];
 
@@ -53,6 +53,18 @@ void RecurMaze(Pos p)
 		cout << "Found!" << endl;
 		return;
 	}
+	//호출될때 아예 갈 수 있는 경우만 호출하자
+	int d[4][2]={{-1,0},{0,1},{1,0},{0,-1}};
+	int nx,ny;
+	maze[p.row][p.col]='X';
+	for(int i=0; i<4; i++){
+		ny=p.row+d[i][0];
+		nx=p.col+d[i][1];
+		if(maze[ny][nx]!='1'&&maze[ny][nx]!='X'){
+			RecurMaze({ny,nx});
+		}
+	}
+	
 
 	// 방문했던 적이 없고 ('X'가 아니고)
 	// 벽도 아닌 경우 ('1'도 아닌 경우)
@@ -63,12 +75,32 @@ void RecurMaze(Pos p)
 		// 옆으로 이동
 	//}
 }
-
+*/
 //조기 종료가 가능한 버전
-//int RecurMaze(Pos p)
-//{
-//	// TODO:
-//}
+int RecurMaze(Pos p)
+{
+
+	const char mark = maze[p.row][p.col];
+	
+	if (mark == 'G')
+	{
+		cout << "Found!" << endl;
+		return -1;
+	}
+	//호출될때 아예 갈 수 있는 경우만 호출하자
+	int d[4][2]={{-1,0},{0,1},{1,0},{0,-1}};
+	int nx,ny;
+	maze[p.row][p.col]='X';
+	for(int i=0; i<4; i++){
+		ny=p.row+d[i][0];
+		nx=p.col+d[i][1];
+		if(maze[ny][nx]!='1'&&maze[ny][nx]!='X'){
+			if(RecurMaze({ny,nx})==-1) return -1;
+		}
+	}
+	// TODO:
+	return 0;
+}
 
 void StackMaze()
 {
@@ -97,7 +129,16 @@ void StackMaze()
 			cout << "Found!" << endl;
 			break;
 		}
-
+		maze[p.row][p.col]='X';
+		int d[4][2]={{-1,0},{0,1},{1,0},{0,-1}};
+		int nx,ny;
+		for(int i=0; i<4; i++){
+			ny=p.row+d[i][0];
+			nx=p.col+d[i][1];
+			if(maze[ny][nx]!='1'&&maze[ny][nx]!='X'){
+				s.Push({ny,nx});
+			}
+		}
 		// TODO:
 	}
 }
@@ -106,9 +147,9 @@ int main()
 {
 	PrintMaze();
 
-	//RecurMaze({ 1, 1 });
+	RecurMaze({ 1, 1 });
 
-	StackMaze();
+	//StackMaze();
 
 	PrintMaze();
 

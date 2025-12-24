@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <string.h>
 
 template<typename T> // 템플릿 사용
 class Stack
@@ -29,12 +30,14 @@ public:
 
 	bool IsEmpty() const
 	{
+		if(this->top_==-1) return true;
 		return false; // TODO:
 	}
 
 	int Size() const
 	{
-		return 0; //TODO:
+		
+		return top_+1; //TODO:
 	}
 
 	void Print()
@@ -58,7 +61,8 @@ public:
 	void Push(const T& item)
 	{
 		// TODO: 필요하면 리사이즈 
-
+		if(capacity_<=++top_) Resize(capacity_*2);
+		stack_[top_]=item;
 		// TODO:
 	}
 
@@ -66,7 +70,7 @@ public:
 	void Pop()
 	{
 		assert(!IsEmpty());
-
+		top_--;
 		// TODO:
 	}
 
