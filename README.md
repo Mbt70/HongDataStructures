@@ -1,23 +1,11 @@
 # [홍정모 연구소](https://honglab.co.kr/)
 
-- 온라인 강의노트 같은 2차 저작물에는 참고자료에 "[홍정모 연구소](https://honglab.co.kr/)"를 꼭 적어주세요.
-- 다른 학생들의 공부를 위해서 실습 문제의 정답이나 풀이를 온라인에 공개하지 마세요.
-
 ##  [자료구조 압축코스](https://honglab.co.kr/courses/data-structures)
-
-- 코딩 테스트 준비와 알고리듬 공부의 첫 단계
-- 필수 자료구조를 실습 위주로 빠르게!
-- 코테용 문제 풀이를 기초부터 튼튼하게!
-
-### 선수 과목
-- 프로그래밍 입문은 **[홍정모의 파이썬 추월코스](https://honglab.co.kr/courses/python)**
-- 코테 공부용 C++ 문법은 **[C++ 핵심정리(무료)](https://honglab.co.kr/courses/cppsummary)**
-
-## 예제 사용 방법
-- Visual Studio 2022 설정 제공 (**HongLabDataStructures.sln 더블 클릭**)
-- Visual Studio Code는 VSCode 폴더 사용 ([VSCode 사용법](https://youtu.be/uDq7woPOZ_A?si=3qoGEBENHcFFOttB))
-- 맥에서 VSCode 사용 시에는 tasks.json에 "-std=c++17" 과 "${fileDirname}/*.cpp" 추가해주세요. [샘플](https://github.com/HongLabInc/HongLabCppSummary/blob/main/.vscode_mac/tasks.json)
-
-## 주의 사항
-- 사용자 이름이나 폴더에 한글 사용 금지 (시간 낭비 방지 차원입니다.)
-
+- 홍정모 교수님의 자료구조 압축코스를 수강하며 실습하는 곳입니다.
+- 자료구조 문제들을 실습하여 업로드하고 있습니다.
+### 다음 과목 (이후에 대하여)
+- 이 과목을 수강후 저는 알고리즘 압축코스를 수강 예정이며, 그 후에는 백준 등의 ps를 취미로 풀며, 응용과 산업공학과 전공과목에 집중할 예정입니다.
+- 사실 군 생활중에 이것을 하지 않으면 나중엔 정말 하기 힘들 것 같아서 하고 있습니다. 알고리즘 연구반에서 이미 배운 내용이지만 다시 하니 정말 좋은 것 같습니다.
+### 코드에 대하여
+- 홍정모 교수님이 과제를 내주신 부분에 대해서 충실히 작성하였으며, 아마 저의 방식대로 구현한 부분이 많을 수 있습니다.
+- 참고하셔도 좋습니다.
