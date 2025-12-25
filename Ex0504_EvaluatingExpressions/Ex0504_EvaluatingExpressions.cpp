@@ -77,7 +77,23 @@ void InfixToPostfix(Queue<char>& q, Queue<char>& output)
 		q.Dequeue();
 
 		cout << c << endl;
-
+		if(c>='0'&&c<='9'){
+			output.Enqueue(c);
+		}else if(c=='('){
+			s.Push(c);
+		}else if(c==')'){
+			while(s.Top()!='('){
+				output.Enqueue(s.Top());
+				s.Pop();
+			}
+			s.Pop();//잔반처리
+		}else {
+			while(!s.IsEmpty()&&Prec(c)<=Prec(s.Top())){
+				output.Enqueue(s.Top());
+				s.Pop();
+			}
+			s.Push(c);
+		}
 		/*
 		if (c >= '0' && c <= '9') // 숫자(피연산자)라면 output에 추가
 			...;
@@ -121,9 +137,9 @@ int EvalPostfix(Queue<char>& q)
 
 		cout << c << endl;
 
-		/*
 		if (c != '+' && c != '-' && c != '*' && c != '/')
 		{
+			s.Push(int(c-'0'));
 			// 입력이 연산자가 아니면 일단 저장
 			// 문자를 숫자로 변환 c - '0' 예: int('9' - '0') -> 정수 9
 		}
@@ -132,19 +148,22 @@ int EvalPostfix(Queue<char>& q)
 			cout << "Operator: " << c << endl;
 
 			// 입력이 연산자이면 스택에서 꺼내서 연산에 사용
-
+			int b=s.Top(); //순서주의
+			s.Pop();
+			int a=s.Top();
+			s.Pop();
 			if (c == '+') {
-				...
+				s.Push(a+b);
 			}
 			else if (c == '-') {
-				...
+				s.Push(a-b);
 			}
 			else if (c == '*') {
-				...
+				s.Push(a*b);
 			}
 			else if (c == '/')
 			{
-				...
+				s.Push(a/b);
 			}
 			else
 			{
@@ -152,7 +171,7 @@ int EvalPostfix(Queue<char>& q)
 				exit(-1); // 강제 종료
 			}
 		}
-		*/
+		
 
 		cout << "Stack: ";
 		s.Print();

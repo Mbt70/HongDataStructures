@@ -9,8 +9,6 @@ int main()
 
 	d.SetDebugFlag(true);
 
-	d.Print();
-
 	d.PushFront('A');
 	d.Print();
 

@@ -45,7 +45,14 @@ void MoveDisk(int from, int to)
 
 void RecurMoveDisks(int n, int from, int temp, int to)
 {
+	if(n==1){
+		MoveDisk(from,to);
+		return;
+	}
 	// TODO:
+	RecurMoveDisks(n-1,from,to,temp); //목적지를 temp로 두고 시행.
+	RecurMoveDisks(1,from,temp,to); //하나를 목적지로 이동
+	RecurMoveDisks(n-1,temp,from,to); //완성 (작은 문제로 쪼개서 생각하기 분할정복)
 }
 
 int main()

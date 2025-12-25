@@ -33,7 +33,11 @@ public:
 	{
 		if (Base::IsFull())
 			Base::Resize();
-
+		//queue_[--front_%capacity_]=item; //나머지 연산시 음수 가능 주의
+		//front%=capcity_;
+		this->queue_[this->front_]=item;
+		this->front_=(this->front_-1+this->capacity_)%this->capacity_;
+		std::cout << this->front_ <<"앞";
 		// TODO:
 	}
 
@@ -50,7 +54,7 @@ public:
 	void PopBack()
 	{
 		assert(!Base::IsEmpty());
-
+		this->rear_=(this->rear_-1+this->capacity_)%this->capacity_;
 		// TODO:
 	}
 

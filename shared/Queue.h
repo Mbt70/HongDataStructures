@@ -3,7 +3,7 @@
 #include <cassert>
 #include <iostream>
 #include <iomanip>
-
+#include <string.h>
 template<typename T>
 class Queue // Circular Queue
 {
@@ -47,10 +47,15 @@ public:
 		return queue_[rear_];
 	}
 
-	int Size() const
+	int Size() const //왜 size 변수를 안만들어서 관리할까? 메모리 낭비땜시인가?
 	{
+		if(front_<=rear_){
+			return rear_-front_;  //선형세계와 원형세계
+		}else if(front_>rear_){
+			return capacity_-front_+rear_;
+		}
 		// 하나하나 세는 방법 보다는 경우를 따져서 바로 계산하는 것이 빠릅니다.
-
+	
 		// if-else-if-else로 구현하는 경우
 		//if (...)
 		//	return ...;
@@ -70,29 +75,56 @@ public:
 
 	void Resize() // 2배씩 증가
 	{
-		// 조언
-		// - 새로운 개념이 항상 그렇듯 원형 큐도 처음에는 어렵고 나중에는 당연해집니다.
-		// - 처음 공부하실 때 답을 맞추려고 하지 마시고 "어떻게 디버깅을 잘 할까?"를 찾으세요.
-		// - 부지런히 여러가지 출력해보고 "출력하는 도구(예: 배열 출력)"도 만들어서 사용해보고
-		// - 머리도 쓰고 고민도 하다 보면 인생을 지탱해줄 능력을 갖추게 됩니다.
-		// - 힘들면 디스코드에서 조금씩 도움 받으시는 것도 좋아요.
+		int current_size = Size(); // 현재 데이터 개수 저장
+		int old_capacity = capacity_; // 이전 용량 저장 (계산용)
+		
+		// 1. 새 메모리 할당
+		T* temp = new T[capacity_ * 2];
 
-		// TODO: 하나하나 복사하는 방식은 쉽게 구현할 수 있습니다. 
-		//       (도전) 경우를 나눠서 memcpy()로 블럭 단위로 복사하면 더 효율적입니다.
+		// 2. 데이터 복사 (항상 temp의 1번 인덱스부터 채움)
+		if (front_ < rear_) 
+		{
+			// Case A: 데이터가 일렬로 있는 경우 (한 번에 복사)
+			// 출처: queue_의 (front_ + 1)부터
+			// 목적지: temp의 1번부터
+			memcpy(temp + 1, queue_ + front_ + 1, sizeof(T) * current_size);
+		}
+		else 
+		{
+			// Case B: 데이터가 꼬리를 물고 있는 경우 (두 번에 나눠 복사)
+			
+			// 덩어리 1: front 뒤쪽 ~ 배열 끝
+			int first_part = old_capacity - (front_ + 1);
+			memcpy(temp + 1, queue_ + front_ + 1, sizeof(T) * first_part);
+
+			// 덩어리 2: 배열 시작 ~ rear
+			int second_part = rear_ + 1;
+			// 목적지: temp의 (1 + 첫 덩어리 크기) 위치에 딱 붙여서
+			memcpy(temp + 1 + first_part, queue_, sizeof(T) * second_part);
+		}
+
+		// 3. 멤버 변수 업데이트
+		delete[] queue_;
+		queue_ = temp;
+		
+		// 중요: front를 0으로 맞췄으므로, rear는 개수와 같습니다.
+		front_ = 0; 
+		rear_ = current_size; 
+		capacity_ *= 2; // 용량 2배 증가
 	}
-
 	void Enqueue(const T& item) // 맨 뒤에 추가, Push()
 	{
 		if (IsFull())
 			Resize();
-
+		queue_[(++rear_)%capacity_]=item;
 		// TODO:
+		rear_%=capacity_;
 	}
 
 	void Dequeue() // 큐의 첫 요소 삭제, Pop()
 	{
 		assert(!IsEmpty());
-
+		++front_%=capacity_;
 		// TODO: 
 	}
 
