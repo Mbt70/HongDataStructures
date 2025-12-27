@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include "../shared/SinglyLinkedList.h"
+#include <math.h>
 
 using namespace std;
 
@@ -17,14 +18,31 @@ public:
 	void NewTerm(float coef, int exp)
 	{
 		// TODO:
+		Term tp={coef,exp};
+		Node* current=this->first_;
+		Node* prev;
+		while(current){
+			if(current->item.exp>exp){
+				this->InsertBack(prev,tp);
+				return;
+			}else if(current->item.exp==exp){
+				current->item=tp;
+				return;
+			}
+			prev=current;
+			current=current->next;
+		}
+		this->PushBack(tp);
 	}
 
 	float Eval(float x)
 	{
 		float temp = 0.0f;
-
-		// TODO:
-
+		Node* current=this->first_;
+		while(current){
+			temp+=powf(x,current->item.exp)*current->item.coef;
+			current=current->next;
+		}
 		return temp;
 	}
 
@@ -38,16 +56,47 @@ public:
 		Node* i = this->first_;
 		Node* j = poly.first_;
 
-		// TODO:
+		while(i&&j){
+			if(i->item.exp<j->item.exp){
+				temp.NewTerm(i->item.coef,i->item.exp);
+				i=i->next;
+			}else if(i->item.exp>j->item.exp){
+				temp.NewTerm(j->item.coef,j->item.exp);
+				j=j->next;
 
+			}else {
+				float tmp_sum=i->item.coef+j->item.coef;
+				temp.NewTerm(tmp_sum,i->item.exp);
+				i=i->next;
+				j=j->next;
+			}
+		}
+		if(i){
+			while(i){
+				temp.NewTerm(i->item.coef,i->item.exp);
+				i=i->next;
+			}
+		}else if(j){
+			while(j){
+				temp.NewTerm(j->item.coef,j->item.exp);
+				j=j->next;
+			}
+		}
 		return temp;
 	}
 
 	void Print()
 	{
 		bool is_first = true; // 더하기 출력시 확인용
-
-		// TODO:
+		Node* curr=this->first_;
+		while(curr){
+			if(!is_first){
+				cout << "+";
+			}
+			is_first=0;
+			cout << curr->item.coef <<"*x^"<<curr->item.exp<<" ";
+			curr=curr->next;
+		}
 
 		cout << endl;
 	}

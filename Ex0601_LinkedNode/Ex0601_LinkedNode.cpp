@@ -17,11 +17,18 @@ struct Node
 void RecurPrint(Node* node)
 {
 	// TODO:
+	if(node!=nullptr){
+		cout << *node << endl;
+		RecurPrint(node->next);
+	}
 }
 
 void IterPrint(Node* node)
 {
-	// TODO:
+	while(node!=nullptr){
+		cout << *node << endl;
+		node=node->next;
+	}
 }
 
 int main()
@@ -66,13 +73,17 @@ int main()
 	// first->next = second;
 	// TODO:
 	// 마지막
-
-	//cout << *(first) << endl;
-	//cout << *(first->next) << endl;
-	//cout << *(first->next->next) << endl;
-	//cout << *(first->next->next->next) << endl;
-	//cout << *(first->next->next->next->next) << endl;
-	//// cout << *(first->next->next->next->next->next) << endl; // 오류
+	first->next=second;
+	second->next=third;
+	third->next=fourth;
+	fourth->next=fifth;
+	fifth->next=nullptr;
+	// cout << *(first) << endl;
+	// cout << *(first->next) << endl;
+	// cout << *(first->next->next) << endl;
+	// cout << *(first->next->next->next) << endl;
+	// cout << *(first->next->next->next->next) << endl;
+	// // cout << *(first->next->next->next->next->next) << endl; // 오류
 
 	cout << endl;
 
@@ -86,14 +97,21 @@ int main()
 	//}
 
 	// 재귀 호출 이용
-	//RecurPrint(first);
-	//cout << endl;
+	RecurPrint(first);
+	cout << endl;
 
 	// 반복문 이용
-	//IterPrint(first);
-	//cout << endl;
-
+	IterPrint(first);
+	cout << endl;
+	
+	
 	// TODO: 데이터 삭제
-
+	Node* node=first;
+	while(node){
+		Node* temp=node;
+		cout << *node <<"delete"<<endl;
+		node=node->next;
+		delete temp;
+	}
 	return 0;
 }

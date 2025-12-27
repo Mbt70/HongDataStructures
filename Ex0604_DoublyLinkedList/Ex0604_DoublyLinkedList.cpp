@@ -24,7 +24,7 @@ int main()
 
 	list.PushBack(5);
 	list.Print();
-
+	cout<< "Test" << flush;
 	list.Reverse();
 	list.Print();
 
