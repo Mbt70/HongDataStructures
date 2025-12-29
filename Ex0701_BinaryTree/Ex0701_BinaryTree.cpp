@@ -74,6 +74,7 @@ int main()
 	tree.IterPostorder();
 	cout << endl;
 
+	//tree.~BinaryTree(); 와 이거 실행되면 두번 호출돼서 죽는거구나.. return시 자동으로 이거 실행시킨데!
 	// 트리 소멸자에서 삭제
 	//delete n1;
 	//delete n2;

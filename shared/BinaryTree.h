@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <string> // BinaryTree 출력
+#include <math.h>
 
 #include "Queue.h"
 #include "Stack.h"
@@ -71,7 +72,10 @@ public:
 
 	int Sum(Node* node)
 	{
-		return 0; // TODO:
+		if(node==nullptr){
+			return 0;
+		}
+		return Sum(node->left)+Sum(node->right)+node->item; // TODO:
 	}
 
 	int Height()
@@ -81,7 +85,11 @@ public:
 
 	int Height(Node* node)
 	{
-		return 0; // TODO:
+		if(node==nullptr){
+			return 0;
+		}
+		
+		return std::max(Height(node->left),Height(node->right))+1; // TODO:
 	}
 
 	~BinaryTree()
@@ -92,20 +100,36 @@ public:
 	void DeleteTree(Node* node)
 	{
 		if (node)
-		{
-			// TODO: 힌트 Post-order
+		{	
+			//std::cout <<node<<"왜"<<std::flush;
+			DeleteTree(node->left); //오류나네..
+			DeleteTree(node->right);
+			delete node;
+			return;
 		}
 	}
 
 	void Preorder() { Preorder(root_); }
 	void Preorder(Node* node)
-	{
+	{	
+		if(node==nullptr){
+			return;
+		}
+		Visit(node);
+		Preorder(node->left);
+		Preorder(node->right);
 		// TODO:
 	};
 
 	void Inorder() { Inorder(root_); }
 	void Inorder(Node* node)
-	{
+	{	
+		if(node==nullptr){
+			return;
+		}
+		Inorder(node->left);
+		Visit(node);
+		Inorder(node->right);
 		// TODO:
 	}
 
@@ -113,6 +137,12 @@ public:
 	void Postorder(Node* node)
 	{
 		// TODO:
+		if(node==nullptr){
+			return;
+		}
+		Postorder(node->left);
+		Postorder(node->right);
+		Visit(node);
 	}
 
 	void LevelOrder()
@@ -122,8 +152,18 @@ public:
 		while (current)
 		{
 			Visit(current);
-			// TODO:
-		}
+			if(current->left!=nullptr){
+				q.Enqueue(current->left);
+			}
+			if(current->right!=nullptr){
+				q.Enqueue(current->right);
+			}
+			if(q.IsEmpty()){
+				break;
+			}
+			current=q.Front();
+			q.Dequeue();
+		}                                                     
 	}
 
 	void IterPreorder()
@@ -135,6 +175,15 @@ public:
 
 		while (!s.IsEmpty())
 		{
+			Visit(s.Top());
+			Node* temp=s.Top();
+			s.Pop();
+			if(temp->right){
+				s.Push(temp->right);
+			}
+			if(temp->left){
+				s.Push(temp->left);
+			}
 			// TODO:
 		}
 	}
@@ -147,8 +196,14 @@ public:
 
 		Node* current = root_;
 		while (current || !s.IsEmpty())
-		{
-			// TODO:
+		{	
+			while(current){ //내려가는부분
+				s.Push(current);
+				current=current->left;
+			}
+			Visit(s.Top());  //Stack에서 나오면 바로 visit하는 규칙!
+			current=s.Top()->right; //굳이 이거 if문 안박아도 될듯.
+			s.Pop();
 		}
 	}
 
@@ -161,11 +216,16 @@ public:
 
 		while (!s1.IsEmpty())
 		{
-			// TODO:
+			s2.Push(s1.Top());
+			s1.Pop();
+			if(s2.Top()->left) s1.Push(s2.Top()->left);
+			if(s2.Top()->right) s1.Push(s2.Top()->right);
 		}
 
 		while (!s2.IsEmpty())
 		{
+			Visit(s2.Top());
+			s2.Pop();
 			// TODO:
 		}
 	}
