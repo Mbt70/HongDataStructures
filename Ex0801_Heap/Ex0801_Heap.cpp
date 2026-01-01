@@ -29,12 +29,13 @@ int main()
 		h.Print();
 	}
 
+	
 	// 힙 정렬 O(nlogn), Not stable
 	while (!h.IsEmpty())
 	{
 		cout << h.Top() << " ";
 		h.Pop();
-		// h.Print();
+		//h.Print();
 	}
 	cout << endl;
 

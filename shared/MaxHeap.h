@@ -1,9 +1,10 @@
 ﻿#pragma once
 
 #include <cassert>
+#include <string.h>
 #include <iostream>
 #include <iomanip>
-
+using namespace std;
 template<typename T>
 class MaxHeap
 {
@@ -63,13 +64,13 @@ public:
 		size_ += 1;
 		int current = size_; // 마지막에 추가가될 위치 (인덱스)
 
-		while (current != 1 /* && TODO */) // 부모 위치의 값이 추가하려는 값보다 작다면
+		while (current != 1&&heap_[current/2]<item) // 부모 위치의 값이 추가하려는 값보다 작다면
 		{
 			// 부모 위치의 값을 자식 위치로 복사해서 내린다.
-			// TODO:
-
-			//cout << "Current = " << current << endl;
-			//Print();
+			heap_[current]=heap_[current/2];
+			current/=2;
+			cout << "Current = " << current << endl;
+			Print();
 
 			// TODO:
 		}
@@ -94,7 +95,24 @@ public:
 		int current = 1;			// 루트 노드에서 시작
 		int child = 2;				// current * 2 (루트의 왼쪽 자식 인덱스)
 		while (child <= size_)
-		{
+		{	
+			if(child==size_){ //자식이 하나라면
+				child=size_;	
+			}else if(heap_[child]<heap_[child+1]){
+				child=child+1;
+			}
+
+			if(last_item>=heap_[child]){
+				break;
+			}
+			
+			heap_[current]=heap_[child];
+			current=child;
+			child*=2;
+
+			
+
+
 			// left, right 중에서 더 큰 자식의 인덱스를 찾는다. 이때 자식이 하나라면 찾을 필요 없음
 			// TODO:
 
@@ -104,8 +122,8 @@ public:
 			// 자식 값을 부모 위치로 복사, 
 			// TODO:
 
-			//cout << "Current = " << current << ", child = " << child << endl;
-			//Print();
+			cout << "Current = " << current << ", child = " << child << endl;
+			Print();
 
 			// 그 자식 위치로 current 인덱스 변경, child 인덱스도 그 다음 자식 위치로 변경
 			// TODO:

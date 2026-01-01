@@ -2,6 +2,7 @@
 
 #include <iomanip>
 #include <cassert>
+#include <math.h>
 #include <iostream>
 
 template<typename K, typename V>
@@ -78,7 +79,16 @@ public:
 	Item* IterGet(const K& key)
 	{
 		// TODO:
-
+		Node* current=root_;
+		while(current){
+			if(current->item.key<key){
+				current=current->right;
+			}else if(current->item.key>key){
+				current=current->left;
+			}else {
+				return &current->item;
+			}
+		}
 		return nullptr; // No matching
 	}
 
@@ -91,8 +101,20 @@ public:
 
 	Node* Insert(Node* node, const Item& item)
 	{
+		if(node==nullptr){
+			Node* new_child=new Node{item,nullptr,nullptr};
+			return new_child;
+		}
 		// 힌트: RecurGet()
-
+		if(node->item.key<item.key){
+			node->right=Insert(node->right,item);
+		}
+		if(node->item.key>item.key){
+			node->left=Insert(node->left,item);
+		}
+		if(node->item.key==item.key){
+			node->item=item;
+		}
 		// TODO:
 
 		return node;
@@ -100,7 +122,26 @@ public:
 
 	void IterInsert(const Item& item)
 	{
+		Node* current=root_;
+		Node* prev;
+		while(current){
+			if(current->item.key<item.key){
+				prev=current;
+				current=current->right;
+			}
+			if(current->item.key>item.key){
+				prev=current;
+				current=current->left;
+			}
+			if(current->item.key==item.key){
+				current->item=item;
+				return;
+			}
+		}
 		// TODO:
+		current=new Node{item,nullptr,nullptr};
+		if(prev->item.key<item.key) prev->right=current;
+		else prev->left=current;
 	}
 
 	Node* MinKeyLeft(Node* node)
@@ -128,6 +169,26 @@ public:
 			node->right = Remove(node->right, key);
 		else
 		{
+			if(!node->left&&!node->right){
+				delete node;
+				return nullptr;
+			}
+			else if(!node->left){
+				Node* temp=node->right;
+				delete node;
+				return temp;
+			}
+			else if(!node->right){
+				Node* temp=node->left;
+				delete node;
+				return temp;
+			}
+			else {
+				Node* temp=MinKeyLeft(node->right);
+				node->item=temp->item;
+				//delete temp; //이거 삭제해도 되나?
+				node->right=Remove(node->right,temp->item.key); //이게 킥이네.
+			}
 			// TODO:
 		}
 

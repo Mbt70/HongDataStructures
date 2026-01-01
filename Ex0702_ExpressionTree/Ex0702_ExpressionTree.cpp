@@ -29,20 +29,76 @@ public:
 		return Evaluate(Base::root_);
 	}
 
-	int Evaluate(Node* node)
-	{
-		// TODO: 트리에 저장된 수식의 결과값을 계산
+	int Evaluate(Node* node) //이거 반복문으로 해보자
+	{	
+		int a,c;
+		char op;
+		if(IsDigit(node->item)){ //종료조건
+			return int(node->item-'0');
+		}
+		a=Evaluate(node->left);
+		op=node->item;
+		c=Evaluate(node->right);
+		if(op=='+'){
+			return a+c;
+		}else if(op=='*'){
+			return a*c;
+		}else if(op=='/'){
+			return a/c;
+		}else if(op=='-'){
+			return a-c;
+		}
 		return 0;
+		// TODO: 트리에 저장된 수식의 결과값을 계산
+		
 	}
 
 	void Infix() { Infix(root_); cout << endl; }
 	void Infix(Node* node) {
+		if(IsDigit(node->item)){
+			cout <<node->item;
+			return;
+		}
+		if(Prec(node->item)>Prec(node->left->item)&&Prec(node->left->item)!=-1){ //숫자면 우선순위 -1
+			cout << '(';
+			Infix(node->left);
+			cout << ')';
+		}else {
+			Infix(node->left);
+		}
+		cout << node->item;
+
+		if(Prec(node->item)>Prec(node->right->item)&&Prec(node->right->item)!=-1){ //숫자면 우선순위 -1
+			cout << '(';
+			Infix(node->right);
+			cout << ')';
+		}else {
+			Infix(node->right);
+		}
 		// TODO: 수식을 Infix 형식으로 출력 (괄호 포함)
 	}
 
 	void Postfix() { Postfix(root_);  cout << endl; }
 	void Postfix(Node* node) {
 		// TODO: 수식을 Postfix 형식으로 출력
+		//이거 post order네.
+		Stack<Node*> s1, s2;
+		s1.Push(node);
+		while(!s1.IsEmpty()){
+			Node* curr=s1.Top();
+			s1.Pop();
+			s2.Push(curr);
+			if(curr->left){
+				s1.Push(curr->left);
+			}
+			if(curr->right){
+				s1.Push(curr->right);
+			}
+		}
+		while(!s2.IsEmpty()){
+			cout << s2.Top()->item;
+			s2.Pop();
+		}
 	}
 
 	// Infix -> postfix -> expression tree
@@ -69,11 +125,19 @@ public:
 			postfix.Dequeue();
 
 			if (c >= '0' && c <= '9')
-			{
+			{	
+				Node* n=new Node{c,nullptr,nullptr};
+				s.Push(n);
 				// TODO:
 			}
 			else
 			{
+				Node* curr=new Node{c,nullptr,nullptr};
+				curr->right=s.Top();
+				s.Pop();
+				curr->left=s.Top();
+				s.Pop();
+				s.Push(curr); //이걸 넣는 행위가 사실상 숫자를 업데이트 하는것.
 				// TODO:
 			}
 		}
@@ -132,6 +196,7 @@ int main()
 	tree.Postfix(); // 532-4*+ <- 출력 예시
 
 	cout << endl;
+	
 
 	// Infix -> Postfix -> Expression Tree
 	{
