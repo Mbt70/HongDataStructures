@@ -1,7 +1,7 @@
 ﻿#include <iostream>
 
 #include "../shared/AVL.h"
-
+#include <algorithm>
 using namespace std;
 
 int main()

@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#include <algorithm>
 #include "BinarySearchTree.h"
 
 template<typename K, typename V>
@@ -7,9 +7,8 @@ class AVL : public BinarySearchTree<K, V>
 {
 public:
 	using Base = BinarySearchTree<K, V>;
-	using Item = BinarySearchTree<K, V>::Item;
-	using Node = BinarySearchTree<K, V>::Node;
-
+	using typename BinarySearchTree<K, V>::Item;
+    using typename BinarySearchTree<K, V>::Node;
 	//struct Item {
 	//	K key = K();	// first
 	//	V value = V();	// second
@@ -36,16 +35,30 @@ public:
 
 	Node* RotateLeft(Node* parent)
 	{
+		Node* child=parent->right;
+		Node* temp;
 		// TODO:
-
-		return nullptr;
+		std::swap(parent->item,child->item); 
+		parent->right=child->right;
+		temp=parent->left;
+		parent->left=child;
+		child->right=child->left;
+		child->left=temp;
+		return parent;
 	}
 
-	Node* RotateRight(Node* parent)
-	{
+	Node* RotateRight(Node* parent)  //표준방식도 시도해봐야함 swap할시에 내부 아이템이 아주 큰경우 굉장히 비효율적. 
+	{ //근데 표준 방식으로 포인터만 옮기면 8비트밖에 안듬.
 		// TODO:
-
-		return nullptr;
+		Node* child=parent->left;
+		Node* temp;
+		std::swap(parent->item,child->item);
+		parent->left=child->left;
+		temp=parent->right;
+		parent->right=child;
+		child->left=child->right;
+		child->right=temp;
+		return parent;
 	}
 
 	void Insert(const Item& item)
@@ -71,6 +84,22 @@ public:
 		}
 
 		int balance = Balance(node);
+
+		if(balance>1 && Balance(node->left)>=0){
+			node=RotateRight(node);
+		}
+		if(balance>1 && Balance(node->left)<0){
+			node->left=RotateLeft(node->left);
+			node=RotateRight(node);
+		}
+		if(balance<-1 && Balance(node->right)<=0){
+			node=RotateLeft(node);
+		}
+		if(balance<-1 && Balance(node->right)>0){
+			node->right=RotateRight(node->right);
+			node=RotateLeft(node);
+		}
+
 
 		// balance가 0, 1, -1 이면 조절할 필요가 없다고 판단
 
@@ -147,6 +176,17 @@ public:
 
 		int balance = Balance(node);
 
+		if(balance>1 && Balance(node->left)>=0){
+			node=RotateRight(node);
+		}else if(balance>1 && Balance(node->left)<0){
+			node->left=RotateLeft(node->left);
+			node=RotateRight(node);
+		}else if(balance<-1 && Balance(node->right)<=0){
+			node=RotateLeft(node);
+		}else if(balance<-1&&Balance(node->right)>0){
+			node->right=RotateRight(node->right);
+			node=RotateLeft(node);
+		}
 		// TODO:
 
 		return node;
